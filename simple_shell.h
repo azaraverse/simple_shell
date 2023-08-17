@@ -10,6 +10,10 @@
 #define MAX_INPUT_LENGTH 1024
 
 
+/* error_helper functions */
+void command_error(const char *cmd);
+void fork_error(void);
+
 char *_strchr(const char *s, int c);
 
 #endif /* _SIMPLE_SHELL_ */
