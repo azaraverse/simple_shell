@@ -15,7 +15,7 @@ char *_strchr(const char *s, int c)
 	while (*s != '\0')
 	{
 		if (*s == c)
-			return (char *)s; /* cast to char * to match strchr */
+			return (char *s); /* cast to char * to match strchr */
 		s++;
 	}
 	return (NULL);
@@ -23,7 +23,7 @@ char *_strchr(const char *s, int c)
 
 /**
  * _strlen - returns the length of a string.
- * @string - char to check.
+ * @string: char to check.
  *
  * Return: length of string.
  */
@@ -38,5 +38,4 @@ unsigned int _strlen(const char *string)
 	}
 
 	return (lenght);
-
 }
