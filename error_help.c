@@ -7,13 +7,13 @@
 
 void command_error(const char *cmd)
 {
-	const char *error_meassage = "simple_shell: Error: Command";
+	const char *error_meassage = "simple_shell: Error: Command '";
 	size_t error_message_length = _strlen(error_message);
 
 	/** write the error message to standard error **/
 	write(STDERR_FILENO, error_message, error_message_length);
 	write(STDERR_FILENO, cmd, _strlen(cmd));
-	write(STDERR_FILENO, '" not found\n", 12);
+	write(STDERR_FILENO, "' not found\n", 12);
 
 }
 
