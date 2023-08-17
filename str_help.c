@@ -20,3 +20,23 @@ char *_strchr(const char *s, int c)
 	}
 	return (NULL);
 }
+
+/**
+ * _strlen - returns the length of a string.
+ * @string - char to check.
+ *
+ * Return: length of string.
+ */
+
+unsigned int _strlen(const char *string)
+{
+	unsigned int length = 0;
+
+	while (string[length] != '\0')
+	{
+		length++;
+	}
+
+	return (lenght);
+
+}
