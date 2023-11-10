@@ -12,6 +12,9 @@ char *_getenv(const char *name)
 	char *value;
 	unsigned int i, j;
 
+	if (!environ)
+		return (NULL);
+
 	i = 0;
 	while (*environ[i])
 	{

@@ -26,6 +26,8 @@ char *_strcat(char *dest, char *src);
 
 /* execution helper functions */
 char **tokenise(char *input, const char *e_str);
+char *_which(char *filename);
+char *command_check(char *cmd, char *name);
 void exec(char **argv);
 
 /* free functions */
@@ -33,7 +35,6 @@ void freesplit(char **split);
 
 /* environment helper functions */
 char *_getenv(const char *name);
-char *_which(char *filename);
 int starts_with(const char *s, const char *prefix);
 int _setenv(char *name, char *value, int overwrite);
 int _unsetenv(char *name);
@@ -49,5 +50,11 @@ typedef struct PathNode
 PathNode *add_PathNode_end(PathNode *head, char *dir);
 PathNode *get_PathList(void);
 void freelist(PathNode *head);
+
+/* error handlers */
+char *_itoa(int num, char *s, int base);
+void fork_error(int cmdCounter);
+void cmd_error(int cmdCounter, char *name, char *cmd);
+void execve_error(int current_cmd, char *name, char *cmd);
 
 #endif /* _A_SHELL_H_ */

@@ -45,7 +45,7 @@ int _prompt(char **line, size_t *len, char *prompt)
  * Return: Always 0.
  */
 
-int main(void)
+int main(int argc, char *argv[])
 {
 	/* pid_t child_pid; */
 	char *fullPATH, *prompt = "#simple_shell$ ";
@@ -55,6 +55,7 @@ int main(void)
 	/* int status; */
 	size_t len = 0;
 	PathNode *pathList, *current;
+	(void)argc;
 
 	_setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin", 1);
 	pathList = get_PathList();
@@ -73,7 +74,7 @@ int main(void)
 			if (split[0][0] == '/')
 				fullPATH = _strdup(split[0]);
 			else
-				fullPATH = _which(split[0]);
+				fullPATH = command_check(split[0], argv[0]);
 			if (fullPATH)
 			{
 				free(split[0]);

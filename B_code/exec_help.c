@@ -86,23 +86,43 @@ char *_which(char *filename)
  *
  */
 
+char *command_check(char *cmd, char *name)
+{
+	char *full_path;
+	static int cmdCounter = 1;
+
+	full_path = _which(cmd);
+	if (!full_path)
+	{
+		cmd_error(cmdCounter, name, cmd);
+		return (NULL);
+	}
+	cmdCounter++;
+	return (full_path);
+}
+
+/**
+ *
+ */
+
 void exec(char **argv)
 {
 	pid_t child_pid;
 	int status;
+	static int cmdCounter = 1;
 
 	if (!argv || !argv[0])
 		return;
 
 	child_pid = fork();
 	if (child_pid == -1)
-		perror(_getenv("-"));
+		fork_error(cmdCounter);
 	if (child_pid == 0)
 	{
 		if (execve(argv[0], argv, environ) == -1)
-			perror(argv[0]);
+			execve_error(cmdCounter, argv[0], argv[0]);
 		exit(EXIT_FAILURE);
 	}
 	wait(&status);
+	cmdCounter++;
 }
-
