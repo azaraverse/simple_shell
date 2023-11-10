@@ -50,12 +50,13 @@ int main(void)
 	/* pid_t child_pid; */
 	char *fullPATH, *prompt = "#simple_shell$ ";
 	char *line = NULL;
+	/* char *name = "PATH", *value = "/usr/bin:/bin:/usr/sbin:/sbin"; */
 	char **split;
 	/* int status; */
 	size_t len = 0;
 	PathNode *pathList, *current;
 
-	_setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin:", 1);
+	_setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin", 1);
 	pathList = get_PathList();
 	while (1)
 	{
@@ -88,6 +89,6 @@ int main(void)
 	}
 	freelist(pathList);
 	free(line);
-	printf("program ended\n");
+	/* printf("program ended\n"); */
 	return (0);
 }

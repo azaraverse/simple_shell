@@ -34,7 +34,8 @@ void freesplit(char **split);
 /* environment helper functions */
 char *_getenv(const char *name);
 char *_which(char *filename);
-int _setenv(char *name, char *value);
+int starts_with(const char *s, const char *prefix);
+int _setenv(char *name, char *value, int overwrite);
 int _unsetenv(char *name);
 
 /* structure for a single node in linked list */

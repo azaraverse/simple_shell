@@ -97,6 +97,26 @@ PathNode *get_PathList(void)
 }
 
 /**
+ * starts_with - a function that checks if one string starts with another
+ * @s: pointer to string to be compared with prefix
+ * @prefix: pointer to string to compare with s
+ *
+ * Return: 1 to start with prefix, 0 to ignore.
+ */
+
+int starts_with(const char *s, const char *prefix)
+{
+	while (*prefix)
+	{
+		if (*prefix != *s)
+			return (0);
+		prefix++;
+		s++;
+	}
+	return (1);
+}
+
+/**
  * _setenv - a function that sets the value of an env variable
  * @name: pointer to the environment variable name
  * @value: pointer to the value to set the env variable
@@ -104,68 +124,50 @@ PathNode *get_PathList(void)
  * Return: 0 on success, -1 on failure
  */
 
-int _setenv(char *name, char *value)
+int _setenv(char *name, char *value, int overwrite)
 {
-	char *new_env;
-	unsigned int i, j, k;
+	char *new_env; /* *old_env */
+	unsigned int i;
+
+	if (!name || !value)
+		return (-1);
 
 	i = 0;
 	while (*environ[i])
 	{
-		j = 0;
-		if (name[j] == environ[i][j])
+		if (starts_with(environ[i], name))
 		{
-			while (name[j])
+			if (overwrite)
 			{
-				if (name[j] != environ[i][j])
-					break;
-				j++;
-			}
-			if (name[j] == '\0')
-			{
-				free(environ[i]);
+				/* old_env = environ[i]; */
 				new_env = malloc(_strlen(name) +
 						 _strlen(value) + 2);
 				if (new_env == NULL)
 					return (-1);
-				k = 0;
-				while (name[k])
-				{
-					new_env[k] = name[k];
-					k++;
-				}
-				new_env[k++] = '=';
-				k = 0;
-				while (value[k])
-				{
-					new_env[k] = value[k];
-					k++;
-				}
-				new_env[k] = '\0';
+
+				_strcpy(new_env, name);
+				_strcat(new_env, "=");
+				_strcat(new_env, value);
+
 				environ[i] = new_env;
+				/* free(old_env); */
 				return (0);
 			}
+			else
+				return (0);
 		}
 		i++;
 	}
 	new_env = malloc(_strlen(name) + _strlen(value) + 2);
 	if (new_env == NULL)
 		return (-1);
-	k = 0;
-	while (name[k])
-	{
-		new_env[k] = name[k];
-		k++;
-	}
-	new_env[k++] = '=';
-	k = 0;
-	while (value[k])
-	{
-		new_env[k] = value[k];
-		k++;
-	}
-	new_env[k] = '\0';
+
+	_strcpy(new_env, name);
+	_strcat(new_env, "=");
+	_strcat(new_env, value);
+
 	environ[i] = new_env;
+	environ[i + 1] = NULL;
 	return (0);
 }
 
