@@ -49,6 +49,40 @@ char **tokenise(char *input, const char *e_str)
 }
 
 /**
+ * _which - a function that finds executable files
+ * @filename: executable file name to find
+ *
+ * Return: duplicate of the filepath, NULL if filepath can not be found
+ */
+
+char *_which(char *filename)
+{
+	char *path, *token;
+	char filepath[BUFFER];
+	struct stat st;
+
+	path = _getenv("PATH");
+	if (!path)
+	{
+		write(STDERR_FILENO, "Could not get path env variable.\n", 1);
+		exit(1);
+	}
+
+	token = strtok(path, ":");
+	while (token)
+	{
+		_strcpy(filepath, token); /* copy the dir path to filepath */
+		_strcat(filepath, "/"); /* append a "/" to filepath */
+		_strcat(filepath, filename); /* append filename to filepath */
+
+		if (stat(filepath, &st) == 0)
+			return (_strdup(filepath));
+		token = strtok(NULL, ":");
+	}
+	return (NULL);
+}
+
+/**
  *
  */
 

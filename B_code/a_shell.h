@@ -34,6 +34,8 @@ void freesplit(char **split);
 /* environment helper functions */
 char *_getenv(const char *name);
 char *_which(char *filename);
+int _setenv(char *name, char *value);
+int _unsetenv(char *name);
 
 /* structure for a single node in linked list */
 typedef struct PathNode

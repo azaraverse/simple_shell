@@ -55,6 +55,7 @@ int main(void)
 	size_t len = 0;
 	PathNode *pathList, *current;
 
+	_setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin:", 1);
 	pathList = get_PathList();
 	while (1)
 	{
