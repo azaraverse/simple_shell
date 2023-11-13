@@ -61,7 +61,7 @@ int _prompt(char **line, size_t *len, char *prompt)
 
 int main(int argc, char *argv[])
 {
-	char *fullPATH, *prompt = "#simple_shell$ ";
+	char *fullPATH, *prompt = "#$ ";
 	char *line = NULL;
 	char **split;
 	size_t len = 0;
