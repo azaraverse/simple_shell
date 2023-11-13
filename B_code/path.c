@@ -35,7 +35,7 @@ char *_getenv(const char *name)
 		}
 		i++;
 	}
-	return (NULL);
+	return (0);
 }
 
 /**
@@ -73,7 +73,7 @@ PathNode *add_PathNode_end(PathNode *head, char *dir)
 			current = current->next;
 		current->next = addNode;
 	}
-	return (head);
+	return (addNode);
 }
 
 /**

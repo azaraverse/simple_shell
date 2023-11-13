@@ -1,6 +1,18 @@
 #include "a_shell.h"
 
 /**
+ * _isatty - a function that checks if stdin is associated with a terminal
+ * @fd: file descriptor to check against isatty.
+ *
+ * Return: void.
+ */
+
+int _isatty(int fd)
+{
+	return (isatty(fd));
+}
+
+/**
  * _prompt - displays a prompt and reads user input
  * @line: double pointer to store user's input
  * @len: pointer to size_t variable to keep track of length of buffer pointed
@@ -15,8 +27,8 @@ int _prompt(char **line, size_t *len, char *prompt)
 	size_t input_length;
 	ssize_t read;
 
-	/* printf("displaying prompt: %s\n", prompt); */
-	write(STDOUT_FILENO, prompt, _strlen(prompt));
+	if (_isatty(STDIN_FILENO))
+		write(STDOUT_FILENO, prompt, _strlen(prompt));
 
 	if (*line)
 	{
@@ -41,18 +53,17 @@ int _prompt(char **line, size_t *len, char *prompt)
 
 /**
  * main - program entry point
+ * @argc: argument count
+ * @argv: argument vector
  *
  * Return: Always 0.
  */
 
 int main(int argc, char *argv[])
 {
-	/* pid_t child_pid; */
 	char *fullPATH, *prompt = "#simple_shell$ ";
 	char *line = NULL;
-	/* char *name = "PATH", *value = "/usr/bin:/bin:/usr/sbin:/sbin"; */
 	char **split;
-	/* int status; */
 	size_t len = 0;
 	PathNode *pathList, *current;
 	(void)argc;
@@ -61,35 +72,43 @@ int main(int argc, char *argv[])
 	pathList = get_PathList();
 	while (1)
 	{
-		if (!_prompt(&line, &len, prompt))
-			break;
-		/* printf("main loop running...\n"); */
-
-		/* path = _getenv("PATH"); */
-		split = tokenise(line, " \n");
-		if (!split || !split[0])
-			exec(split);
-		else
+		if (_prompt(&line, &len, prompt))
 		{
-			if (split[0][0] == '/')
-				fullPATH = _strdup(split[0]);
-			else
-				fullPATH = command_check(split[0], argv[0]);
-			if (fullPATH)
+			if (line && *line && line[0] != '\0')
 			{
-				free(split[0]);
-				split[0] = fullPATH;
-				exec(split);
+				split = tokenise(line, " \n");
+				if (!split || !split[0])
+				{
+					exec(split);
+					freesplit(split);
+				}
+				else
+				{
+					if (split[0][0] == '/')
+						fullPATH = _strdup(split[0]);
+					else
+						fullPATH =
+							command_check(split[0],
+								      argv[0]);
+					if (fullPATH)
+					{
+						free(split[0]);
+						split[0] = fullPATH;
+						exec(split);
+					}
+					else
+						freesplit(split);
+				}
 			}
-			else
-				freesplit(split);
+			current = pathList;
+			while (current)
+				current = current->next;
 		}
-		current = pathList;
-		while (current)
-			current = current->next;
+		else
+			break;
 	}
+
 	freelist(pathList);
 	free(line);
-	/* printf("program ended\n"); */
 	return (0);
 }

@@ -99,5 +99,5 @@ void execve_error(int current_cmd, char *name, char *cmd)
 	_strcat(err_message, ": execution failed\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
-	/* exit(EXIT_FAILURE); */
+	exit(EXIT_FAILURE);
 }

@@ -17,13 +17,14 @@ char **tokenise(char *input, const char *e_str)
 	if (!copy)
 	{
 		perror("Memory Allocation failure\n");
+		free(copy);
 		return (NULL);
 	}
 
 	words = malloc(sizeof(char *) * MAX_WORDS);
 	if (!words)
 	{
-		free(copy);
+		free(words);
 		return (NULL);
 	}
 
@@ -79,7 +80,7 @@ char *_which(char *filename)
 			return (_strdup(filepath));
 		token = strtok(NULL, ":");
 	}
-	return (NULL);
+	return (0);
 }
 
 /**
@@ -119,9 +120,10 @@ void exec(char **argv)
 		fork_error(cmdCounter);
 	if (child_pid == 0)
 	{
-		if (execve(argv[0], argv, environ) == -1)
+		if (execve(argv[0], argv, environ) == 0)
+			exit(EXIT_SUCCESS);
+		else
 			execve_error(cmdCounter, argv[0], argv[0]);
-		exit(EXIT_FAILURE);
 	}
 	wait(&status);
 	cmdCounter++;
