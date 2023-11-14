@@ -84,7 +84,10 @@ char *_which(char *filename)
 }
 
 /**
+ * file_exists - a function that checks the existence of a file in a path
+ * @filename: file to check
  *
+ * Return: 0 on success
  */
 
 int file_exists(const char *filename)
@@ -93,7 +96,10 @@ int file_exists(const char *filename)
 }
 
 /**
+ * exec - a function that executes a command
+ * @argv: double pointer to the a pointer that holds the command to execute
  *
+ * Return: 0 on success
  */
 
 int exec(char **argv)
@@ -152,7 +158,7 @@ int exec(char **argv)
 		{
 			cmd_error(cmdCounter, name, argv[0]);
 			cmdCounter++;
-			return (127);
+			exit(127);
 		}
 	}
 	return (0);

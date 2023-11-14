@@ -21,7 +21,8 @@ void freesplit(char **split)
 }
 
 /**
- *
+ * freelist - a function that frees a linked list
+ * @head: pointer to list head
  */
 
 void freelist(PathNode *head)

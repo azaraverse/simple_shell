@@ -53,8 +53,6 @@ int _prompt(char **line, size_t *len, char *prompt)
 
 /**
  * main - program entry point
- * @argc: argument count
- * @argv: argument vector
  *
  * Return: Always 0.
  */
@@ -76,13 +74,19 @@ int main(void)
 			if (line && *line && line[0] != '\0')
 			{
 				split = tokenise(line, " ");
-				if (!split || !split[0])
+				if (split && split[0] && _strcmp(split[0],
+					    "exit") == 0)
+				{
+					freesplit(split);
+					freelist(pathList);
+					free(line);
+					exit(0);
+				}
+				else
 				{
 					exec(split);
 					freesplit(split);
 				}
-				else
-					exec(split);
 			}
 			current = pathList;
 			while (current)

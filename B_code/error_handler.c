@@ -1,7 +1,12 @@
 #include "a_shell.h"
 
 /**
+ * _itoa - a function that converts an integer to string
+ * @num: integer
+ * @s: char
+ * @base: integer base
  *
+ * Return: converted string
  */
 
 char *_itoa(int num, char *s, int base)
@@ -45,7 +50,8 @@ char *_itoa(int num, char *s, int base)
 }
 
 /**
- *
+ * fork_error - a function that handles fork errors
+ * @cmdCounter: error return value
  */
 
 void fork_error(int cmdCounter)
@@ -63,7 +69,10 @@ void fork_error(int cmdCounter)
 }
 
 /**
- *
+ * cmd_error - a function that handles command not found errors
+ * @cmdCounter: int return value
+ * @name: program name
+ * @cmd: command name
  */
 
 void cmd_error(int cmdCounter, char *name, char *cmd)
@@ -79,11 +88,12 @@ void cmd_error(int cmdCounter, char *name, char *cmd)
 	_strcat(err_message, ": not found\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
-	exit(127);
-}
 
 /**
- *
+ * execve_error - a function that handles execve failed errors
+ * @current_cmd: int return value
+ * @name: program name
+ * @cmd: command name
  */
 
 void execve_error(int current_cmd, char *name, char *cmd)
