@@ -87,19 +87,9 @@ char *_which(char *filename)
  *
  */
 
-char *command_check(char *cmd, char *name)
+int file_exists(const char *filename)
 {
-	char *full_path;
-	static int cmdCounter = 1;
-
-	full_path = _which(cmd);
-	if (!full_path)
-	{
-		cmd_error(cmdCounter, name, cmd);
-		exit(127);
-	}
-	cmdCounter++;
-	return (full_path);
+	return (access(filename, F_OK) != -1);
 }
 
 /**
@@ -116,35 +106,54 @@ int exec(char **argv)
 
 	if (!argv || !argv[0])
 		return (0);
-	if (access(argv[0], F_OK) == -1)
-	{
-		cmd_error(cmdCounter, name, argv[0]);
-		exit(127);
-	}
 
-	child_pid = fork();
-	if (child_pid == -1)
-		fork_error(cmdCounter);
-	if (child_pid == 0)
+	if (file_exists(argv[0]))
 	{
-		if (argv[0][0] == '/')
+		child_pid = fork();
+		if (child_pid == -1)
+			fork_error(cmdCounter);
+		else if (child_pid == 0)
+		{
 			execve(argv[0], argv, environ);
+			execve_error(cmdCounter, name, argv[0]);
+			exit(EXIT_FAILURE);
+		}
 		else
 		{
-			fullPATH = command_check(argv[0], name);
-			if (fullPATH)
+			waitpid(child_pid, &status, 0);
+			cmdCounter++;
+			return (WEXITSTATUS(status));
+		}
+	}
+	else
+	{
+		fullPATH = _which(argv[0]);
+		if (fullPATH)
+		{
+			child_pid = fork();
+			if (child_pid == -1)
+				fork_error(cmdCounter);
+			else if (child_pid == 0)
+			{
+				execve(fullPATH, argv, environ);
+				execve_error(cmdCounter, fullPATH, argv[0]);
+				exit(EXIT_FAILURE);
+			}
+			else
 			{
 				free(argv[0]);
 				argv[0] = fullPATH;
-				if (execve(fullPATH, argv, environ) == -1)
-					execve_error(cmdCounter, fullPATH,
-						     argv[0]);
+				waitpid(child_pid, &status, 0);
+				cmdCounter++;
+				return (WEXITSTATUS(status));
 			}
-			else
-				freesplit(argv);
+		}
+		else
+		{
+			cmd_error(cmdCounter, name, argv[0]);
+			cmdCounter++;
+			return (127);
 		}
 	}
-	waitpid(child_pid, &status, 0);
-	cmdCounter++;
-	return (WEXITSTATUS(status));
+	return (0);
 }

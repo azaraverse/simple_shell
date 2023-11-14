@@ -28,7 +28,7 @@ char *_strcat(char *dest, char *src);
 /* execution helper functions */
 char **tokenise(char *input, const char *e_str);
 char *_which(char *filename);
-char *command_check(char *cmd, char *name);
+int file_exists(const char *filename);
 int exec(char **argv);
 
 /* free functions */
