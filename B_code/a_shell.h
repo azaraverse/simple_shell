@@ -24,6 +24,7 @@ size_t _strcspn(const char *s, const char *reject);
 char *_strdup(char *s);
 char *_strcpy(char *dest, char *src);
 char *_strcat(char *dest, char *src);
+int _strcmp(char *str1, char *str2);
 
 /* execution helper functions */
 char **tokenise(char *input, const char *e_str);
@@ -40,7 +41,15 @@ int starts_with(const char *s, const char *prefix);
 int _setenv(char *name, char *value, int overwrite);
 int _unsetenv(char *name);
 
-/* structure for a single node in linked list */
+/**
+ * struct PathNode - singly linked list
+ * @directory: char
+ * @next: pointer to the next node
+ *
+ * Description: singly linked list node structure
+ *
+ */
+
 typedef struct PathNode
 {
 	char *directory;
