@@ -80,7 +80,7 @@ char *_which(char *filename)
 			return (_strdup(filepath));
 		token = strtok(NULL, ":");
 	}
-	return (0);
+	return (NULL);
 }
 
 /**
@@ -96,7 +96,7 @@ char *command_check(char *cmd, char *name)
 	if (!full_path)
 	{
 		cmd_error(cmdCounter, name, cmd);
-		return (NULL);
+		exit(127);
 	}
 	cmdCounter++;
 	return (full_path);
@@ -106,25 +106,45 @@ char *command_check(char *cmd, char *name)
  *
  */
 
-void exec(char **argv)
+int exec(char **argv)
 {
 	pid_t child_pid;
 	int status;
+	char *name = "./hsh";
+	char *fullPATH;
 	static int cmdCounter = 1;
 
 	if (!argv || !argv[0])
-		return;
+		return (0);
+	if (access(argv[0], F_OK) == -1)
+	{
+		cmd_error(cmdCounter, name, argv[0]);
+		exit(127);
+	}
 
 	child_pid = fork();
 	if (child_pid == -1)
 		fork_error(cmdCounter);
 	if (child_pid == 0)
 	{
-		if (execve(argv[0], argv, environ) == 0)
-			exit(EXIT_SUCCESS);
+		if (argv[0][0] == '/')
+			execve(argv[0], argv, environ);
 		else
-			execve_error(cmdCounter, argv[0], argv[0]);
+		{
+			fullPATH = command_check(argv[0], name);
+			if (fullPATH)
+			{
+				free(argv[0]);
+				argv[0] = fullPATH;
+				if (execve(fullPATH, argv, environ) == -1)
+					execve_error(cmdCounter, fullPATH,
+						     argv[0]);
+			}
+			else
+				freesplit(argv);
+		}
 	}
-	wait(&status);
+	waitpid(child_pid, &status, 0);
 	cmdCounter++;
+	return (WEXITSTATUS(status));
 }

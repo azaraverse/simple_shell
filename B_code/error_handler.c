@@ -79,7 +79,7 @@ void cmd_error(int cmdCounter, char *name, char *cmd)
 	_strcat(err_message, ": not found\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
-	/* exit(EXIT_FAILURE); */
+	exit(127);
 }
 
 /**
@@ -90,7 +90,7 @@ void execve_error(int current_cmd, char *name, char *cmd)
 {
 	char err_message[1024], cmdStr[12];
 
-	strcpy(err_message, name);
+	_strcpy(err_message, name);
 	_strcat(err_message, ": ");
 	_itoa(current_cmd, cmdStr, 10);
 	_strcat(err_message, cmdStr);
@@ -99,5 +99,5 @@ void execve_error(int current_cmd, char *name, char *cmd)
 	_strcat(err_message, ": execution failed\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
-	exit(EXIT_FAILURE);
+	exit(127);
 }

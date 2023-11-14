@@ -40,14 +40,14 @@ int _prompt(char **line, size_t *len, char *prompt)
 	read = getline(line, len, stdin);
 	if (read == -1)
 	{
-		write(STDOUT_FILENO, "\n", 1);
+		if (_isatty(STDIN_FILENO))
+			write(STDOUT_FILENO, "\n", 1);
 		return (0);
 	}
 
 	input_length = _strcspn(*line, "\n");
 	if (input_length < (size_t)read)
 		(*line)[input_length] = '\0';
-	/* printf("user input: %s\n", *line); */
 	return (1);
 }
 
@@ -59,14 +59,13 @@ int _prompt(char **line, size_t *len, char *prompt)
  * Return: Always 0.
  */
 
-int main(int argc, char *argv[])
+int main(void)
 {
-	char *fullPATH, *prompt = "#$ ";
+	char *prompt = "#simple_shell$ ";
 	char *line = NULL;
 	char **split;
 	size_t len = 0;
 	PathNode *pathList, *current;
-	(void)argc;
 
 	_setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin", 1);
 	pathList = get_PathList();
@@ -76,29 +75,14 @@ int main(int argc, char *argv[])
 		{
 			if (line && *line && line[0] != '\0')
 			{
-				split = tokenise(line, " \n");
+				split = tokenise(line, " ");
 				if (!split || !split[0])
 				{
 					exec(split);
 					freesplit(split);
 				}
 				else
-				{
-					if (split[0][0] == '/')
-						fullPATH = _strdup(split[0]);
-					else
-						fullPATH =
-							command_check(split[0],
-								      argv[0]);
-					if (fullPATH)
-					{
-						free(split[0]);
-						split[0] = fullPATH;
-						exec(split);
-					}
-					else
-						freesplit(split);
-				}
+					exec(split);
 			}
 			current = pathList;
 			while (current)

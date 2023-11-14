@@ -1,5 +1,6 @@
 #ifndef _A_SHELL_H_
 #define _A_SHELL_H_
+#include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -28,7 +29,7 @@ char *_strcat(char *dest, char *src);
 char **tokenise(char *input, const char *e_str);
 char *_which(char *filename);
 char *command_check(char *cmd, char *name);
-void exec(char **argv);
+int exec(char **argv);
 
 /* free functions */
 void freesplit(char **split);
