@@ -2,9 +2,9 @@
 
 /**
  * _itoa - a function that converts an integer to string
- * @num: integer
- * @s: char
- * @base: integer base
+ * @num: integer to convert
+ * @s: buffer to store resulting str
+ * @base: integer base for conversion
  *
  * Return: converted string
  */
@@ -88,6 +88,7 @@ void cmd_error(int cmdCounter, char *name, char *cmd)
 	_strcat(err_message, ": not found\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
+}
 
 /**
  * execve_error - a function that handles execve failed errors
@@ -109,5 +110,4 @@ void execve_error(int current_cmd, char *name, char *cmd)
 	_strcat(err_message, ": execution failed\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
-	exit(127);
 }

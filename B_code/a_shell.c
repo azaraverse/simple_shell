@@ -64,8 +64,9 @@ int main(void)
 	char **split;
 	size_t len = 0;
 	PathNode *pathList, *current;
+	const built_in *builtIns = init_builtin();
 
-	_setenv("PATH", "/usr/bin:/bin:/usr/sbin:/sbin", 1);
+	_setenv("PATH", "/bin:/usr/bin:/usr/local/bin:/usr/sbin:/sbin:", 1);
 	pathList = get_PathList();
 	while (1)
 	{
@@ -74,19 +75,13 @@ int main(void)
 			if (line && *line && line[0] != '\0')
 			{
 				split = tokenise(line, " ");
-				if (split && split[0] && _strcmp(split[0],
-					    "exit") == 0)
+				if (!split || !split[0])
 				{
-					freesplit(split);
-					freelist(pathList);
-					free(line);
-					exit(0);
-				}
-				else
-				{
-					exec(split);
+					exec_cmd(builtIns, split);
 					freesplit(split);
 				}
+				exec_cmd(builtIns, split);
+				freesplit(split);
 			}
 			current = pathList;
 			while (current)
@@ -97,6 +92,8 @@ int main(void)
 	}
 
 	freelist(pathList);
+	freelist(current);
 	free(line);
+	_exitt(split);
 	return (0);
 }

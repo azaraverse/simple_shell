@@ -42,7 +42,7 @@ char **tokenise(char *input, const char *e_str)
 			return (NULL);
 		}
 		num++;
-		token = strtok(NULL, " ");
+		token = strtok(NULL, e_str);
 	}
 	free(copy);
 	words[num] = NULL;
@@ -78,6 +78,7 @@ char *_which(char *filename)
 
 		if (stat(filepath, &st) == 0)
 			return (_strdup(filepath));
+
 		token = strtok(NULL, ":");
 	}
 	return (NULL);
@@ -156,6 +157,7 @@ int exec(char **argv)
 		}
 		else
 		{
+			printf("Full path to %s: %s\n", argv[0], fullPATH);
 			cmd_error(cmdCounter, name, argv[0]);
 			cmdCounter++;
 			exit(127);
