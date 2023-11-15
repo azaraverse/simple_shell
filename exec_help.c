@@ -157,7 +157,6 @@ int exec(char **argv)
 		}
 		else
 		{
-			printf("Full path to %s: %s\n", argv[0], fullPATH);
 			cmd_error(cmdCounter, name, argv[0]);
 			cmdCounter++;
 			exit(127);
