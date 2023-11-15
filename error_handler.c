@@ -88,6 +88,7 @@ void cmd_error(int cmdCounter, char *name, char *cmd)
 	_strcat(err_message, ": not found\n");
 
 	write(STDERR_FILENO, err_message, _strlen(err_message));
+}
 
 /**
  * execve_error - a function that handles execve failed errors
