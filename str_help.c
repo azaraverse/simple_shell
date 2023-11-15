@@ -15,8 +15,6 @@ int _strlen(char *s)
 		return (0);
 }
 
-#include "a_shell.h"
-
 /**
  * _strcspn - a function that returns the length of a segment of a string that
  * does not contain any of the chars in the specified set
@@ -64,12 +62,9 @@ char *_strdup(char *s)
 	while (s[i] != '\0')
 		i++;
 
-	array = malloc(i * sizeof(char) + 1);
+	array = malloc((i + 1) * sizeof(char));
 	if (!array)
-	{
-		free(array);
 		return (NULL);
-	}
 
 	j = 0;
 	while (j < i)
@@ -79,4 +74,49 @@ char *_strdup(char *s)
 	}
 	array[i] = '\0';
 	return (array);
+}
+
+/**
+ * _strcpy - a function that copies the string pointed to by src to dest
+ * @dest: destination pointer to store copied string
+ * @src: source pointer to store copied string
+ *
+ * Return: a pointer to dest
+ */
+
+char *_strcpy(char *dest, char *src)
+{
+	int i;
+
+	i = -1;
+	do {
+		i++;
+		dest[i] = src[i];
+	} while (src[i] != '\0');
+
+	return (dest);
+}
+
+/**
+ * _strcat - a function that concatenates two strings
+ * @dest: destination string
+ * @src: source string
+ *
+ * Return: dest
+ */
+
+char *_strcat(char *dest, char *src)
+{
+	char *s = dest;
+
+	while (*dest != '\0')
+		dest++;
+	while (*src != '\0')
+	{
+		*dest = *src;
+		dest++;
+		src++;
+	}
+	*dest = '\0';
+	return (s);
 }
