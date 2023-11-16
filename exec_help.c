@@ -8,7 +8,7 @@
  * Return: pointer to a char containing split words
  */
 
-char **tokenise(char *input, const char *e_str)
+char **tokenise(char *input, char *e_str)
 {
 	char **words = NULL, *copy = NULL, *token = NULL;
 	int i, num = 0;
@@ -28,7 +28,7 @@ char **tokenise(char *input, const char *e_str)
 		return (NULL);
 	}
 
-	token = strtok(copy, e_str);
+	token = _strtok(copy, e_str);
 	while (token)
 	{
 		words[num] = _strdup(token);
@@ -42,7 +42,7 @@ char **tokenise(char *input, const char *e_str)
 			return (NULL);
 		}
 		num++;
-		token = strtok(NULL, e_str);
+		token = _strtok(NULL, e_str);
 	}
 	free(copy);
 	words[num] = NULL;
@@ -79,7 +79,7 @@ char *_which(char *filename)
 		exit(1);
 	}
 
-	token = strtok(path, ":");
+	token = _strtok(path, ":");
 	while (token)
 	{
 		_strcpy(filepath, token); /* copy the dir path to filepath */
@@ -97,7 +97,7 @@ char *_which(char *filename)
 			return (res);
 		}
 
-		token = strtok(NULL, ":");
+		token = _strtok(NULL, ":");
 	}
 	return (NULL);
 }

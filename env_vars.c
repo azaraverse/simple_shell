@@ -39,6 +39,36 @@ char *_getenv(const char *name)
 }
 
 /**
+ * _realloc - a function that resizes the memory pointed to a pointer allocated
+ * by malloc
+ * @ptr: pointer address
+ * @old_size: previous size of alloaction
+ * @new_size: new size of alloaction
+ * Return: void
+ */
+
+void *_realloc(void *ptr, size_t old_size, size_t new_size)
+{
+	void *newPtr;
+	size_t copySize;
+
+	if (new_size == 0)
+	{
+		free(ptr);
+		return (NULL);
+	}
+
+	newPtr = malloc(new_size);
+	if (ptr != NULL)
+	{
+		copySize = (old_size < new_size) ? old_size : new_size;
+		memcpy(newPtr, ptr, copySize);
+		free(ptr);
+	}
+	return (newPtr);
+}
+
+/**
  * starts_with - a function that checks if one string starts with another
  * @s: pointer to string to be compared with prefix
  * @prefix: pointer to string to compare with s
@@ -60,9 +90,8 @@ int starts_with(const char *s, const char *prefix)
 
 /**
  * _setenv - a function that sets the value of an env variable
- * @name: pointer to the environment variable name
+ * @var: pointer to the environment variable name
  * @value: pointer to the value to set the env variable
- * @overwrite: overwrite value
  *
  * Return: 0 on success, -1 on failure
  */
@@ -87,9 +116,10 @@ int _setenv(char *var, char *value)
 				_strcat(environ[i], "=");
 				_strcat(environ[i], value);
 			}
-		        else
+			else
 			{
-				new_env = malloc(len);
+				new_env = _realloc(environ[i],
+						   _strlen(environ[i]), len);
 				if (!new_env)
 				{
 					write(STDERR_FILENO,
@@ -116,7 +146,8 @@ int _setenv(char *var, char *value)
 	num_vars = 0;
 	while (environ[num_vars])
 		num_vars++;
-	environ = realloc(environ, (num_vars + 2) * sizeof(char *));
+	environ = _realloc(environ, num_vars * sizeof(char *),
+			   (num_vars + 2) * sizeof(char *));
 	if (environ == NULL)
 	{
 		write(STDERR_FILENO, "memory alloc fail\n", 18);

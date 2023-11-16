@@ -52,3 +52,54 @@ void _puts(char *str)
 		_putchar(str[i]);
 	_putchar('\n');
 }
+
+/**
+ * _strchr - locates a character in a given string
+ * @s: the string to check
+ * @c: the character to check
+ *
+ * Return: pointer to the first occurence of the character
+ */
+
+char *_strchr(char *s, char c)
+{
+	for (; *s; s++)
+	{
+		if (*s != c)
+			continue;
+		else
+			return (s);
+	}
+	if (c == '\0')
+		return (s);
+	return (NULL);
+}
+
+/**
+ * _strtok - a function that breaks a string into series of tokens using a
+ * delim
+ * @str: string to break down
+ * @delim: delimiter passed as argument
+ *
+ * Return: pointer to the first broken word
+ */
+
+char *_strtok(char *str, char *delim)
+{
+	static char *current;
+	char *start;
+
+	if (str)
+		current = str;
+
+	if (!current || *current == '\0')
+		return (NULL);
+
+	start = current;
+	while (*current != '\0' && _strchr(delim, *current) == NULL)
+		current++;
+	if (*current != '\0')
+		*current++ = '\0';
+	return (start);
+}
+

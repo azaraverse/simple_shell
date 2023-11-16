@@ -2,7 +2,7 @@
 
 int global_status = 0;
 /**
- * _exit - a function that handles the 'exit' built-in command
+ * _exitt - a function that handles the 'exit' built-in command
  * @argv: double pointer to a pointer holding built-in command 'exit'
  */
 
@@ -51,6 +51,7 @@ void _printenv(void)
 
 /**
  * init_builtin - a function that initialises the array of builtin commands
+ * Return: functions to execute built-in commands
  */
 
 const built_in *init_builtin(void)

@@ -3,6 +3,7 @@
 #include <errno.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <stddef.h>
 #include <string.h>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -28,9 +29,11 @@ char *_strcat(char *dest, char *src);
 int _strcmp(const char *str1, const char *str2);
 int _putchar(char c);
 void _puts(char *str);
+char *_strchr(char *s, char c);
+char *_strtok(char *str, char *delim);
 
 /* execution helper functions */
-char **tokenise(char *input, const char *e_str);
+char **tokenise(char *input, char *e_str);
 char *_which(char *filename);
 int file_exists(const char *filename);
 int exec(char **argv);
@@ -40,6 +43,7 @@ void freesplit(char **split);
 
 /* environment helper functions */
 char *_getenv(const char *name);
+void *_realloc(void *ptr, size_t old_size, size_t new_size);
 int starts_with(const char *s, const char *prefix);
 int _setenv(char *var, char *value);
 int _unsetenv(char *name);
