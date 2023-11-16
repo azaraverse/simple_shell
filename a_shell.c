@@ -66,7 +66,7 @@ int main(void)
 	PathNode *pathList, *current;
 	const built_in *builtIns = init_builtin();
 
-	_setenv("PATH", "/bin:/usr/bin:/usr/local/bin:/usr/sbin:/sbin:", 1);
+	_setenv("PATH", "/bin:/usr/bin:/usr/local/bin:/usr/sbin:/sbin:");
 	pathList = get_PathList();
 	while (1)
 	{

@@ -45,6 +45,8 @@ char **tokenise(char *input, const char *e_str)
 		token = strtok(NULL, e_str);
 	}
 	free(copy);
+	/* for (i = 0; i < num; i++)
+	   free(words[i]); */
 	words[num] = NULL;
 	return (words);
 }
@@ -58,10 +60,20 @@ char **tokenise(char *input, const char *e_str)
 
 char *_which(char *filename)
 {
-	char *path, *token;
+	char *path, *token, *res;
 	char filepath[BUFFER];
 	struct stat st;
 
+	if (file_exists(filename))
+	{
+		res = _strdup(filename);
+		if (!res)
+		{
+			perror("Memory allocation failed\n");
+			exit(EXIT_FAILURE);
+		}
+		return (res);
+	}
 	path = _getenv("PATH");
 	if (!path)
 	{
@@ -77,7 +89,15 @@ char *_which(char *filename)
 		_strcat(filepath, filename); /* append filename to filepath */
 
 		if (stat(filepath, &st) == 0)
-			return (_strdup(filepath));
+		{
+			res = _strdup(filepath);
+			if (!res)
+			{
+				perror("Memory Allocation failed\n");
+				exit(EXIT_FAILURE);
+			}
+			return (res);
+		}
 
 		token = strtok(NULL, ":");
 	}
@@ -121,9 +141,11 @@ int exec(char **argv)
 			fork_error(cmdCounter);
 		else if (child_pid == 0)
 		{
-			execve(argv[0], argv, environ);
-			execve_error(cmdCounter, name, argv[0]);
-			exit(EXIT_FAILURE);
+			if (execve(argv[0], argv, environ) == -1)
+			{
+				execve_error(cmdCounter, name, argv[0]);
+				exit(EXIT_FAILURE);
+			}
 		}
 		else
 		{
@@ -142,9 +164,12 @@ int exec(char **argv)
 				fork_error(cmdCounter);
 			else if (child_pid == 0)
 			{
-				execve(fullPATH, argv, environ);
-				execve_error(cmdCounter, fullPATH, argv[0]);
-				exit(EXIT_FAILURE);
+				if (execve(fullPATH, argv, environ) == -1)
+				{
+					execve_error(cmdCounter, fullPATH,
+						     argv[0]);
+					exit(EXIT_FAILURE);
+				}
 			}
 			else
 			{
@@ -154,6 +179,7 @@ int exec(char **argv)
 				cmdCounter++;
 				return (WEXITSTATUS(status));
 			}
+			free(fullPATH);
 		}
 		else
 		{

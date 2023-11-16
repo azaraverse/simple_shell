@@ -97,6 +97,9 @@ void exec_cmd(const built_in *builtIns, char **argv)
 	if (!argv || !argv[0])
 		return;
 
+	/* if (strspn(argv[0], " \t\n") == (size_t)_strlen(argv[0]))
+	   return; */
+
 	if (is_builtin(builtIns, argv[0]))
 	{
 		for (i = 0; builtIns[i].name; i++)

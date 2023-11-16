@@ -67,47 +67,64 @@ int starts_with(const char *s, const char *prefix)
  * Return: 0 on success, -1 on failure
  */
 
-int _setenv(char *name, char *value, int overwrite)
+int _setenv(char *var, char *value)
 {
-	char *new_env; /* *old_env */
-	unsigned int i;
+	char *new_env;
+	int i, num_vars;
+	size_t len;
 
-	if (!name || !value)
+	if (!var || !value)
 		return (-1);
-	i = 0;
-	while (*environ[i])
+
+	for (i = 0; environ[i]; i++)
 	{
-		if (starts_with(environ[i], name))
+		if (starts_with(environ[i], var))
 		{
-			if (overwrite)
+			len = _strlen(var) + _strlen(value) + 2;
+			if (len <= (size_t)_strlen(environ[i]))
 			{
-				new_env = malloc(_strlen(name) +
-						 _strlen(value) + 2);
-				if (new_env == NULL)
-					return (-1);
-
-				_strcpy(new_env, name);
-				_strcat(new_env, "=");
-				_strcat(new_env, value);
-
-				environ[i] = new_env;
-				return (0);
+				_strcpy(environ[i], var);
+				_strcat(environ[i], "=");
+				_strcat(environ[i], value);
 			}
-			else
-				return (0);
+		        else
+			{
+				new_env = malloc(len);
+				if (!new_env)
+				{
+					write(STDERR_FILENO,
+					      "memory alloc fail\n", 18);
+					return (-1);
+				}
+				_strcpy(environ[i], var);
+				_strcat(environ[i], "=");
+				_strcat(environ[i], value);
+			}
+			return (0);
 		}
-		i++;
 	}
-	new_env = malloc(_strlen(name) + _strlen(value) + 2);
-	if (new_env == NULL)
+	new_env = malloc(_strlen(var) + _strlen(value) + 2);
+	if (!new_env)
+	{
+		write(STDERR_FILENO, "memory alloc fail\n", 18);
 		return (-1);
-
-	_strcpy(new_env, name);
+	}
+	_strcpy(new_env, var);
 	_strcat(new_env, "=");
 	_strcat(new_env, value);
 
-	environ[i] = new_env;
-	environ[i + 1] = NULL;
+	num_vars = 0;
+	while (environ[num_vars])
+		num_vars++;
+	environ = realloc(environ, (num_vars + 2) * sizeof(char *));
+	if (environ == NULL)
+	{
+		write(STDERR_FILENO, "memory alloc fail\n", 18);
+		free(new_env);
+		return (-1);
+	}
+	environ[num_vars] = new_env;
+	environ[num_vars + 1] = NULL;
 	return (0);
 }
 
