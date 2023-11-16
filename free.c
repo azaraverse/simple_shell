@@ -17,7 +17,6 @@ void freesplit(char **split)
 		free(split[i]);
 		i++;
 	}
-	/* free(split); */
 }
 
 /**

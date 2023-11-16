@@ -41,7 +41,7 @@ void freesplit(char **split);
 /* environment helper functions */
 char *_getenv(const char *name);
 int starts_with(const char *s, const char *prefix);
-int _setenv(char *name, char *value, int overwrite);
+int _setenv(char *var, char *value);
 int _unsetenv(char *name);
 
 /**

@@ -93,7 +93,7 @@ int main(void)
 
 	freelist(pathList);
 	freelist(current);
+	free(split);
 	free(line);
-	/* _exitt(); */
 	return (0);
 }

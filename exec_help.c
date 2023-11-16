@@ -45,8 +45,6 @@ char **tokenise(char *input, const char *e_str)
 		token = strtok(NULL, e_str);
 	}
 	free(copy);
-	/* for (i = 0; i < num; i++)
-	   free(words[i]); */
 	words[num] = NULL;
 	return (words);
 }
