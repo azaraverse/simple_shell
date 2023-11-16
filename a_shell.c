@@ -78,10 +78,12 @@ int main(void)
 				if (!split || !split[0])
 				{
 					exec_cmd(builtIns, split);
+				}
+				else
+				{
+					exec_cmd(builtIns, split);
 					freesplit(split);
 				}
-				exec_cmd(builtIns, split);
-				freesplit(split);
 			}
 			current = pathList;
 			while (current)

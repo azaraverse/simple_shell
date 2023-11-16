@@ -21,19 +21,23 @@ int _isatty(int fd);
 int _prompt(char **line, size_t *len, char *prompt);
 
 /* string helper functions */
-int _strlen(char *s);
+int _strlen(const char *s);
 size_t _strcspn(const char *s, const char *reject);
-char *_strdup(char *s);
-char *_strcpy(char *dest, char *src);
+char *_strdup(const char *s);
+char *_strcpy(char *dest, const char *src);
 char *_strcat(char *dest, char *src);
 int _strcmp(const char *str1, const char *str2);
 int _putchar(char c);
 void _puts(char *str);
-char *_strchr(char *s, char c);
-char *_strtok(char *str, char *delim);
+char *_strchr(const char *s, char c);
+char *_strtok(char *str, const char *delim);
+
+/* token break helper functions */
+size_t _strspn(char *s, const char *accept);
+char *_strtokMul(char *str, const char *delim, char **savePtr);
 
 /* execution helper functions */
-char **tokenise(char *input, char *e_str);
+char **tokenise(char *input, const char *e_str);
 char *_which(char *filename);
 int file_exists(const char *filename);
 int exec(char **argv);

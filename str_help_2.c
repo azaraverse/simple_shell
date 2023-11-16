@@ -61,17 +61,24 @@ void _puts(char *str)
  * Return: pointer to the first occurence of the character
  */
 
-char *_strchr(char *s, char c)
+char *_strchr(const char *s, char c)
 {
-	for (; *s; s++)
+	char *temp = malloc(_strlen(s) + 1);
+
+        if (!temp)
+		return (NULL);
+
+	_strcpy(temp, s);
+	for (; *temp; temp++)
 	{
-		if (*s != c)
+		if (*temp != c)
 			continue;
 		else
-			return (s);
+			return (temp);
 	}
 	if (c == '\0')
-		return (s);
+		return (temp);
+
 	return (NULL);
 }
 
@@ -84,7 +91,7 @@ char *_strchr(char *s, char c)
  * Return: pointer to the first broken word
  */
 
-char *_strtok(char *str, char *delim)
+char *_strtok(char *str, const char *delim)
 {
 	static char *current;
 	char *start;
@@ -95,6 +102,9 @@ char *_strtok(char *str, char *delim)
 	if (!current || *current == '\0')
 		return (NULL);
 
+	while (*current != '\0' && _strchr(delim, *current) != NULL)
+		current++;
+
 	start = current;
 	while (*current != '\0' && _strchr(delim, *current) == NULL)
 		current++;
@@ -102,4 +112,3 @@ char *_strtok(char *str, char *delim)
 		*current++ = '\0';
 	return (start);
 }
-

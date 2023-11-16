@@ -8,7 +8,7 @@
  * Return: pointer to a char containing split words
  */
 
-char **tokenise(char *input, char *e_str)
+char **tokenise(char *input, const char *e_str)
 {
 	char **words = NULL, *copy = NULL, *token = NULL;
 	int i, num = 0;
@@ -17,33 +17,36 @@ char **tokenise(char *input, char *e_str)
 	if (!copy)
 	{
 		perror("Memory Allocation failure\n");
-		free(copy);
 		return (NULL);
 	}
 
 	words = malloc(sizeof(char *) * MAX_WORDS);
 	if (!words)
 	{
-		free(words);
+		free(copy);
 		return (NULL);
 	}
 
 	token = _strtok(copy, e_str);
 	while (token)
 	{
-		words[num] = _strdup(token);
-		if (!words[num])
+		if (token[0] != '\0')
 		{
-			perror("Memory Allocation failure\n");
-			for (i = 0; i < num; i++)
-				free(words[i]);
-			free(words);
-			free(copy);
-			return (NULL);
+			words[num] = _strdup(token);
+			if (!words[num])
+			{
+				perror("Memory Allocation failure\n");
+				for (i = 0; i < num; i++)
+					free(words[i]);
+				free(words);
+				free(copy);
+				return (NULL);
+			}
+			num++;
 		}
-		num++;
 		token = _strtok(NULL, e_str);
 	}
+
 	free(copy);
 	words[num] = NULL;
 	return (words);
@@ -72,6 +75,7 @@ char *_which(char *filename)
 		}
 		return (res);
 	}
+
 	path = _getenv("PATH");
 	if (!path)
 	{
@@ -91,12 +95,11 @@ char *_which(char *filename)
 			res = _strdup(filepath);
 			if (!res)
 			{
-				perror("Memory Allocation failed\n");
+				perror("Memory allocation failed\n");
 				exit(EXIT_FAILURE);
 			}
 			return (res);
 		}
-
 		token = _strtok(NULL, ":");
 	}
 	return (NULL);
@@ -171,13 +174,11 @@ int exec(char **argv)
 			}
 			else
 			{
-				free(argv[0]);
-				argv[0] = fullPATH;
+				free(fullPATH);
 				waitpid(child_pid, &status, 0);
 				cmdCounter++;
 				return (WEXITSTATUS(status));
 			}
-			free(fullPATH);
 		}
 		else
 		{
