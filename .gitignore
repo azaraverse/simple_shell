@@ -1,4 +1,0 @@
-# comments for all files that should not be added to this project repo
-
-strchr_test.c  	   # test file for custom helper function; _strchr
-strtest 	   # executable of custom helper function; _strchr, w test
